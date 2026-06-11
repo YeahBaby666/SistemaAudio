@@ -158,8 +158,42 @@
         const textoBoton = document.getElementById('texto-boton');
         const reproductor = document.getElementById('reproductor');
 
-        tonoInput.addEventListener('input', (e) => valorTono.textContent = parseFloat(e.target.value).toFixed(1));
-        velocidadInput.addEventListener('input', (e) => valorVelocidad.textContent = parseFloat(e.target.value).toFixed(1));
+        // --- NUEVO: Lógica de LocalStorage ---
+        // 1. Cargar preferencias guardadas al renderizar el DOM
+        const cargarPreferencias = () => {
+            const vozGuardada = localStorage.getItem('tts_voz');
+            const tonoGuardado = localStorage.getItem('tts_tono');
+            const velocidadGuardada = localStorage.getItem('tts_velocidad');
+
+            if (vozGuardada) vozSelect.value = vozGuardada;
+            
+            if (tonoGuardado) {
+                tonoInput.value = tonoGuardado;
+                valorTono.textContent = parseFloat(tonoGuardado).toFixed(1);
+            }
+            
+            if (velocidadGuardada) {
+                velocidadInput.value = velocidadGuardada;
+                valorVelocidad.textContent = parseFloat(velocidadGuardada).toFixed(1);
+            }
+        };
+        
+        // Ejecutar inmediatamente
+        cargarPreferencias();
+
+        // 2. Event Listeners: Guardar automáticamente cuando el usuario interactúa
+        vozSelect.addEventListener('change', (e) => localStorage.setItem('tts_voz', e.target.value));
+
+        tonoInput.addEventListener('input', (e) => {
+            valorTono.textContent = parseFloat(e.target.value).toFixed(1);
+            localStorage.setItem('tts_tono', e.target.value); // Guardado en tiempo real
+        });
+
+        velocidadInput.addEventListener('input', (e) => {
+            valorVelocidad.textContent = parseFloat(e.target.value).toFixed(1);
+            localStorage.setItem('tts_velocidad', e.target.value); // Guardado en tiempo real
+        });
+        // --- FIN Lógica de LocalStorage ---
 
         btnGenerar.addEventListener('click', async () => {
             const texto = textoInput.value.trim();
