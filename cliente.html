@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador TTS Local (Descargable)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type=range] { accent-color: #10b981; }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4 text-white">
+
+    <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-2xl p-6 md:p-8 space-y-6">
+        <div class="border-b border-gray-700 pb-4">
+            <h1 class="text-2xl font-bold text-emerald-400">Generador TTS Local</h1>
+            <p class="text-sm text-gray-400 mt-1">Conectado a servidor Python (Localhost:8000)</p>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label for="texto" class="block text-sm font-medium text-gray-300 mb-1">Texto a convertir</label>
+                <textarea id="texto" rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-y" placeholder="Escribe tu frase aquí..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label for="voz" class="block text-sm font-medium text-gray-300 mb-1">Voz (Microsoft Edge TTS)</label>
+                    <select id="voz" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-white">
+                        <optgroup label="Argentina">
+                            <option value="es-AR-ElenaNeural">Elena (Femenino)</option>
+                            <option value="es-AR-TomasNeural">Tomás (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="Bolivia">
+                            <option value="es-BO-MarceloNeural">Marcelo (Masculino)</option>
+                            <option value="es-BO-SofiaNeural">Sofía (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Chile">
+                            <option value="es-CL-CatalinaNeural">Catalina (Femenino)</option>
+                            <option value="es-CL-LorenzoNeural">Lorenzo (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="Colombia">
+                            <option value="es-CO-GonzaloNeural">Gonzalo (Masculino)</option>
+                            <option value="es-CO-SalomeNeural">Salomé (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Costa Rica">
+                            <option value="es-CR-JuanNeural">Juan (Masculino)</option>
+                            <option value="es-CR-MariaNeural">María (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Cuba">
+                            <option value="es-CU-BelkysNeural">Belkys (Femenino)</option>
+                            <option value="es-CU-ManuelNeural">Manuel (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="Ecuador">
+                            <option value="es-EC-AndreaNeural">Andrea (Femenino)</option>
+                            <option value="es-EC-LuisNeural">Luis (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="El Salvador">
+                            <option value="es-SV-LorenaNeural">Lorena (Femenino)</option>
+                            <option value="es-SV-RodrigoNeural">Rodrigo (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="España">
+                            <option value="es-ES-AlvaroNeural" selected>Álvaro (Masculino)</option>
+                            <option value="es-ES-ElviraNeural">Elvira (Femenino)</option>
+                            <option value="es-ES-XimenaNeural">Ximena (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Estados Unidos (Español)">
+                            <option value="es-US-AlonsoNeural">Alonso (Masculino)</option>
+                            <option value="es-US-PalomaNeural">Paloma (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Guatemala">
+                            <option value="es-GT-AndresNeural">Andrés (Masculino)</option>
+                            <option value="es-GT-MartaNeural">Marta (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Guinea Ecuatorial">
+                            <option value="es-GQ-JavierNeural">Javier (Masculino)</option>
+                            <option value="es-GQ-TeresaNeural">Teresa (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Honduras">
+                            <option value="es-HN-CarlosNeural">Carlos (Masculino)</option>
+                            <option value="es-HN-KarlaNeural">Karla (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="México">
+                            <option value="es-MX-DaliaNeural">Dalia (Femenino)</option>
+                            <option value="es-MX-JorgeNeural">Jorge (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="Nicaragua">
+                            <option value="es-NI-FedericoNeural">Federico (Masculino)</option>
+                            <option value="es-NI-YolandaNeural">Yolanda (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Panamá">
+                            <option value="es-PA-MargaritaNeural">Margarita (Femenino)</option>
+                            <option value="es-PA-RobertoNeural">Roberto (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="Paraguay">
+                            <option value="es-PY-MarioNeural">Mario (Masculino)</option>
+                            <option value="es-PY-TaniaNeural">Tania (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Perú">
+                            <option value="es-PE-AlexNeural">Alex (Masculino)</option>
+                            <option value="es-PE-CamilaNeural">Camila (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Puerto Rico">
+                            <option value="es-PR-KarinaNeural">Karina (Femenino)</option>
+                            <option value="es-PR-VictorNeural">Víctor (Masculino)</option>
+                        </optgroup>
+                        <optgroup label="República Dominicana">
+                            <option value="es-DO-EmilioNeural">Emilio (Masculino)</option>
+                            <option value="es-DO-RamonaNeural">Ramona (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Uruguay">
+                            <option value="es-UY-MateoNeural">Mateo (Masculino)</option>
+                            <option value="es-UY-ValentinaNeural">Valentina (Femenino)</option>
+                        </optgroup>
+                        <optgroup label="Venezuela">
+                            <option value="es-VE-PaolaNeural">Paola (Femenino)</option>
+                            <option value="es-VE-SebastianNeural">Sebastián (Masculino)</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label for="tono" class="block text-sm font-medium text-gray-300">Tono</label>
+                        <span id="valor-tono" class="text-sm text-emerald-400 font-mono">1.0</span>
+                    </div>
+                    <input type="range" id="tono" min="0.5" max="1.5" step="0.1" value="1.0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label for="velocidad" class="block text-sm font-medium text-gray-300">Velocidad</label>
+                        <span id="valor-velocidad" class="text-sm text-emerald-400 font-mono">1.0</span>
+                    </div>
+                    <input type="range" id="velocidad" min="0.5" max="2" step="0.1" value="1.0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-700">
+            <button id="btn-generar" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span id="texto-boton">Generar y Descargar MP3</span>
+            </button>
+        </div>
+        
+        <audio id="reproductor" class="w-full mt-4 hidden" controls></audio>
+    </div>
+
+    <script>
+        const textoInput = document.getElementById('texto');
+        const vozSelect = document.getElementById('voz');
+        const tonoInput = document.getElementById('tono');
+        const velocidadInput = document.getElementById('velocidad');
+        const valorTono = document.getElementById('valor-tono');
+        const valorVelocidad = document.getElementById('valor-velocidad');
+        const btnGenerar = document.getElementById('btn-generar');
+        const textoBoton = document.getElementById('texto-boton');
+        const reproductor = document.getElementById('reproductor');
+
+        tonoInput.addEventListener('input', (e) => valorTono.textContent = parseFloat(e.target.value).toFixed(1));
+        velocidadInput.addEventListener('input', (e) => valorVelocidad.textContent = parseFloat(e.target.value).toFixed(1));
+
+        btnGenerar.addEventListener('click', async () => {
+            const texto = textoInput.value.trim();
+            if (!texto) {
+                alert("Por favor, escribe un texto.");
+                return;
+            }
+
+            btnGenerar.disabled = true;
+            btnGenerar.classList.replace('bg-emerald-600', 'bg-gray-600');
+            textoBoton.textContent = "Procesando en Python...";
+
+            try {
+                const respuesta = await fetch('/api/sintetizar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        texto: texto,
+                        voz: vozSelect.value,
+                        tono: parseFloat(tonoInput.value),
+                        velocidad: parseFloat(velocidadInput.value)
+                    })
+                });
+
+                if (!respuesta.ok) throw new Error("Fallo en el servidor local.");
+
+                const blob = await respuesta.blob();
+                const url = URL.createObjectURL(blob);
+                
+                reproductor.src = url;
+                reproductor.classList.remove('hidden');
+                reproductor.play();
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Voz_${vozSelect.value}_${Date.now()}.mp3`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Asegúrate de que el servidor FastAPI esté corriendo en la consola negra.");
+            } finally {
+                btnGenerar.disabled = false;
+                btnGenerar.classList.replace('bg-gray-600', 'bg-emerald-600');
+                textoBoton.textContent = "Generar y Descargar MP3";
+            }
+        });
+    </script>
+</body>
+</html>
