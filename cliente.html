@@ -158,49 +158,71 @@
         const textoBoton = document.getElementById('texto-boton');
         const reproductor = document.getElementById('reproductor');
 
-        // --- NUEVO: Lógica de LocalStorage ---
-        // 1. Cargar preferencias guardadas al renderizar el DOM
-        const cargarPreferencias = () => {
-            const vozGuardada = localStorage.getItem('tts_voz');
-            const tonoGuardado = localStorage.getItem('tts_tono');
-            const velocidadGuardada = localStorage.getItem('tts_velocidad');
-
-            if (vozGuardada) vozSelect.value = vozGuardada;
-            
-            if (tonoGuardado) {
-                tonoInput.value = tonoGuardado;
-                valorTono.textContent = parseFloat(tonoGuardado).toFixed(1);
-            }
-            
-            if (velocidadGuardada) {
-                velocidadInput.value = velocidadGuardada;
-                valorVelocidad.textContent = parseFloat(velocidadGuardada).toFixed(1);
+        // Función robusta para guardar el estado actual
+        const guardarConfiguracion = () => {
+            try {
+                localStorage.setItem('tts_voz', vozSelect.value);
+                localStorage.setItem('tts_tono', tonoInput.value);
+                localStorage.setItem('tts_velocidad', velocidadInput.value);
+            } catch (e) {
+                console.warn("El entorno actual bloquea LocalStorage.");
             }
         };
-        
-        // Ejecutar inmediatamente
-        cargarPreferencias();
 
-        // 2. Event Listeners: Guardar automáticamente cuando el usuario interactúa
-        vozSelect.addEventListener('change', (e) => localStorage.setItem('tts_voz', e.target.value));
+        // Cargar preferencias al iniciar
+        const cargarConfiguracion = () => {
+            try {
+                const voz = localStorage.getItem('tts_voz');
+                const tono = localStorage.getItem('tts_tono');
+                const velocidad = localStorage.getItem('tts_velocidad');
+
+                if (voz) {
+                    // Forma a prueba de fallos para actualizar el <select> en el DOM
+                    Array.from(vozSelect.options).forEach(opt => {
+                        opt.selected = (opt.value === voz);
+                    });
+                }
+                
+                if (tono) {
+                    tonoInput.value = tono;
+                    valorTono.textContent = parseFloat(tono).toFixed(1);
+                }
+                
+                if (velocidad) {
+                    velocidadInput.value = velocidad;
+                    valorVelocidad.textContent = parseFloat(velocidad).toFixed(1);
+                }
+            } catch (e) {
+                console.warn("No se pudo leer LocalStorage.");
+            }
+        };
+
+        // Inicializar
+        cargarConfiguracion();
+
+        // Listeners limpios (Guardado en tiempo real)
+        vozSelect.addEventListener('change', guardarConfiguracion);
 
         tonoInput.addEventListener('input', (e) => {
             valorTono.textContent = parseFloat(e.target.value).toFixed(1);
-            localStorage.setItem('tts_tono', e.target.value); // Guardado en tiempo real
+            guardarConfiguracion();
         });
 
         velocidadInput.addEventListener('input', (e) => {
             valorVelocidad.textContent = parseFloat(e.target.value).toFixed(1);
-            localStorage.setItem('tts_velocidad', e.target.value); // Guardado en tiempo real
+            guardarConfiguracion();
         });
-        // --- FIN Lógica de LocalStorage ---
 
+        // Evento principal de generación
         btnGenerar.addEventListener('click', async () => {
             const texto = textoInput.value.trim();
             if (!texto) {
                 alert("Por favor, escribe un texto.");
                 return;
             }
+
+            // Forzar guardado de la configuración usada para esta generación
+            guardarConfiguracion();
 
             btnGenerar.disabled = true;
             btnGenerar.classList.replace('bg-emerald-600', 'bg-gray-600');
@@ -236,7 +258,7 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                alert("Asegúrate de que el servidor FastAPI esté corriendo en la consola negra.");
+                alert("Asegúrate de que el servidor FastAPI esté corriendo.");
             } finally {
                 btnGenerar.disabled = false;
                 btnGenerar.classList.replace('bg-gray-600', 'bg-emerald-600');
